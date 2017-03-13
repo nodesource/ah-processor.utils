@@ -1,0 +1,27 @@
+{
+  "name": "ah-processor.utils",
+  "version": "0.0.0",
+  "description": "Utilities used by the ah-*.processor modules.",
+  "main": "ah-processor.utils.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thlorenz/ah-processor.utils.git"
+  },
+  "homepage": "https://github.com/thlorenz/ah-processor.utils",
+  "dependencies": {},
+  "devDependencies": { },
+  "keywords": [],
+  "author": {
+    "name": "Thorsten Lorenz",
+    "email": "thlorenz@gmx.de",
+    "url": "http://thlorenz.com"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/thlorenz/ah-processor.utils/blob/master/LICENSE"
+  },
+  "engine": {
+    "node": ">=0.10"
+  }
+}
