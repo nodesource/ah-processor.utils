@@ -156,7 +156,7 @@ function stringifyPath(path, pathPrefix) {
  *
  * If a user function is found twice it will only be included once.
  *
- * @name utils.uniqueUserFunctions
+ * @name uniqueUserFunctions
  * @function
  * @param {Array.<Object>} fns all functions found attached to a particular async resource
  * @param {Object} $0 options
@@ -195,7 +195,7 @@ function omit(omitKey, obj) {
  * As a result, instead of having a `userFunctions` array on each resource
  * we end up with just one on the info object.
  *
- * @name utils.separateUserFunctions
+ * @name separateUserFunctions
  * @function
  * @param {Object} info the info object which references the resources
  */
@@ -245,7 +245,7 @@ function merge(fn1, fn2) {
  * with the `propertyPaths` array which combines the `propertyPath`s of all functions
  * that matched the `location`.
  *
- * @name utils.mergeUserFunctions
+ * @name mergeUserFunctions
  * @function
  * @param {Object} info the object that references the `userFunctions` property
  */

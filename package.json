@@ -6,20 +6,22 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git://github.com/thlorenz/ah-processor.utils.git"
+    "url": "git://github.com/nodesource/ah-processor.utils.git"
   },
-  "homepage": "https://github.com/thlorenz/ah-processor.utils",
-  "dependencies": {},
-  "devDependencies": { },
+  "homepage": "https://github.com/nodesource/ah-processor.utils",
+  "dependencies": {
+    "pretty-ms": "~2.1.0"
+  },
+  "devDependencies": {},
   "keywords": [],
   "author": {
     "name": "Thorsten Lorenz",
     "email": "thlorenz@gmx.de",
-    "url": "http://thlorenz.com"
+    "url": "http://nodesource.com"
   },
   "license": {
     "type": "MIT",
-    "url": "https://github.com/thlorenz/ah-processor.utils/blob/master/LICENSE"
+    "url": "https://github.com/nodesource/ah-processor.utils/blob/master/LICENSE"
   },
   "engine": {
     "node": ">=0.10"
