@@ -200,9 +200,11 @@ function omit(omitKey, obj) {
  * @param {Object} info the info object which references the resources
  */
 function separateUserFunctions(info) {
+  if (info == null) return info
+
   const keys = Object.keys(info)
   const fns = keys
-    .map(k => info[k].userFunctions)
+    .map(k => info[k] && info[k].userFunctions)
     .filter(x => x != null)
     .reduce((acc, fn) => acc.concat(fn), [])
 
