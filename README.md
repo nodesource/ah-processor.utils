@@ -10,17 +10,18 @@ Utilities used by the ah-\*.processor modules.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
--   [API](#api)
-    -   [idsTriggeredBy](#idstriggeredby)
-    -   [oldestId](#oldestid)
-    -   [immediatelyBeforeId](#immediatelybeforeid)
-    -   [prettyNs](#prettyns)
-    -   [safeGetVal](#safegetval)
-    -   [safeFirstStamp](#safefirststamp)
-    -   [uniqueUserFunctions](#uniqueuserfunctions)
-    -   [separateUserFunctions](#separateuserfunctions)
-    -   [mergeUserFunctions](#mergeuserfunctions)
--   [License](#license)
+- [API](#api)
+  - [idsTriggeredBy](#idstriggeredby)
+  - [oldestId](#oldestid)
+  - [immediatelyBeforeId](#immediatelybeforeid)
+  - [prettyNs](#prettyns)
+  - [safeGetVal](#safegetval)
+  - [safeFirstStamp](#safefirststamp)
+  - [uniqueUserFunctions](#uniqueuserfunctions)
+  - [separateUserFunctions](#separateuserfunctions)
+  - [mergeUserFunctions](#mergeuserfunctions)
+  - [lifeCycle](#lifecycle)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -150,6 +151,28 @@ that matched the `location`.
 **Parameters**
 
 -   `info` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object that references the `userFunctions` property
+
+### lifeCycle
+
+Obtains the life cycle information using the `init` and `destroy` time stamps
+of the given activity.
+
+All time stamps have the format: `{ ns: <time in naseconds>, ms: <pretty printed time> }`
+
+The return value includes the following properties:
+
+-   created: when the resource was created, i.e. it's init time stamp
+-   destroyed: when the resource ceased to exist, i.e. it's destroy time stamp
+-   timeAlive: the difference between the above two
+
+    If the `destroy` time stamp isn't avaible it is set to a prettified version of `0`.
+    The same is true in that case for the `timeAlive`.
+
+**Parameters**
+
+-   `activity` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the activity whose life cycle to assess
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the life cycle information
 
 ## License
 
