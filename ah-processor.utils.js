@@ -17,7 +17,7 @@ const prettyMs = require('pretty-ms')
  * @return {Set.<number>} the provided root id and all ids of activities triggered by it or any of it's children,
  * grandchildren, etc.
  */
-exports.idsTriggeredBy = function idsTriggeredBy(activities, id, stop) {
+function idsTriggeredBy(activities, id, stop) {
   const ids = new Set([ id ])
   for (const [ id, activity ] of activities) {
     if (ids.has(activity.triggerId)) ids.add(id)
@@ -39,7 +39,7 @@ exports.idsTriggeredBy = function idsTriggeredBy(activities, id, stop) {
  * @param {Set.<Number>} ids the ids to consider when finding the oldest
  * @return {Number} the id of the oldest activity or `null` if no activity for any id was found
  */
-exports.oldestId = function oldestId(activities, ids) {
+function oldestId(activities, ids) {
   let oldest = { id: null, init: null }
   for (const id of ids) {
     if (!activities.has(id)) continue
@@ -64,7 +64,7 @@ exports.oldestId = function oldestId(activities, ids) {
  * @return {Number} the id that initialized immediately before the activity with `id` or `null` if no activity for any
  * id was found
  */
-exports.immediatelyBeforeId = function immediatelyBeforeId(activities, ids, id) {
+function immediatelyBeforeId(activities, ids, id) {
   if (!activities.has(id)) throw new Error(`The id '${id}' is not part of the given activities!`)
   const baseInit = activities.get(id).init
   const mostImmediate = { id: null, init: null, delta: null }
@@ -92,7 +92,7 @@ exports.immediatelyBeforeId = function immediatelyBeforeId(activities, ids, id) 
  * @return {Object.<string, number>} an object with an `ms` property which is the prettified version
  * of the provided timestamp in milliseconds and `ns`, the originally passed timestamp.
  */
-const prettyNs = exports.prettyNs = function prettyNs(ns) {
+function prettyNs(ns) {
   return { ms: prettyMs(ns * 1E-6, { msDecimalDigits: 2 }), ns }
 }
 
@@ -104,7 +104,7 @@ const prettyNs = exports.prettyNs = function prettyNs(ns) {
  * @param {Object} x the object which has the `val` property
  * @return the `val` property if `x` was defined, otherwise `null`
  */
-exports.safeGetVal = function safeGetVal(x) {
+function safeGetVal(x) {
   return x == null ? null : x.val
 }
 
@@ -117,7 +117,7 @@ exports.safeGetVal = function safeGetVal(x) {
  * @param {Array.<Number>} x the timestamps
  * @return {Object} the prettified first time stamp
  */
-exports.safeFirstStamp = function safeFirstStamp(x) {
+function safeFirstStamp(x) {
   if (x == null || x.length === 0 || x[0] == null) return prettyNs(0)
   return prettyNs(x[0])
 }
@@ -163,7 +163,7 @@ function stringifyPath(path, pathPrefix) {
  * @param {string} [$0.pathPrefix='root'] prefix used for the property paths
  * @return {Array.<Object>} all user functions with the above mentioned details added
  */
-exports.uniqueUserFunctions = function uniqueUserFunctions(fns, { pathPrefix = 'root' } = {}) {
+function uniqueUserFunctions(fns, { pathPrefix = 'root' } = {}) {
   const userFunctions = new Map()
   if (fns == null) return userFunctions
   for (let i = 0; i < fns.length; i++) {
@@ -199,7 +199,7 @@ function omit(omitKey, obj) {
  * @function
  * @param {Object} info the info object which references the resources
  */
-exports.separateUserFunctions = function separateUserFunctions(info) {
+function separateUserFunctions(info) {
   const keys = Object.keys(info)
   const fns = keys
     .map(k => info[k].userFunctions)
@@ -249,7 +249,7 @@ function merge(fn1, fn2) {
  * @function
  * @param {Object} info the object that references the `userFunctions` property
  */
-exports.mergeUserFunctions = function mergeUserFunctions(info) {
+function mergeUserFunctions(info) {
   // Walk through all the functions and index them by `location`
   // When we encounter two functions with the same `location` we  merge them.
   const fns = new Map()
@@ -267,4 +267,45 @@ exports.mergeUserFunctions = function mergeUserFunctions(info) {
     }
   }
   return Object.assign({}, info, { userFunctions: Array.from(fns.values()) })
+}
+
+/**
+ * Obtains the life cycle information using the `init` and `destroy` time stamps
+ * of the given activity.
+ *
+ * All time stamps have the format: `{ ns: <time in naseconds>, ms: <pretty printed time> }`
+ *
+ * The return value includes the following properties:
+ *
+ *  - created: when the resource was created, i.e. it's init time stamp
+ *  - destroyed: when the resource ceased to exist, i.e. it's destroy time stamp
+ *  - timeAlive: the difference between the above two
+ *
+ *  If the `destroy` time stamp isn't avaible it is set to a prettified version of `0`.
+ *  The same is true in that case for the `timeAlive`.
+ *
+ * @name lifeCycle
+ * @param {Object} activity the activity whose life cycle to assess
+ * @return {Object} the life cycle information
+ */
+function lifeCycle(activity) {
+  const created = safeFirstStamp(activity.init)
+  const destroyed = safeFirstStamp(activity.destroy)
+  const timeAlive = destroyed.ns === 0
+    ? prettyNs(0)
+    : prettyNs(destroyed.ns - created.ns)
+  return { created, destroyed, timeAlive }
+}
+
+module.exports = {
+    idsTriggeredBy
+  , oldestId
+  , immediatelyBeforeId
+  , prettyNs
+  , safeGetVal
+  , safeFirstStamp
+  , uniqueUserFunctions
+  , separateUserFunctions
+  , mergeUserFunctions
+  , lifeCycle
 }
