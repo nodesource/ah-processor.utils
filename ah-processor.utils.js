@@ -19,9 +19,13 @@ const prettyMs = require('pretty-ms')
  */
 function idsTriggeredBy(activities, id, stop) {
   const ids = new Set([ id ])
+  let started = false
   for (const [ id, activity ] of activities) {
-    if (ids.has(activity.triggerId)) ids.add(id)
-    if (stop(id, activity)) break
+    if (ids.has(activity.triggerId)) {
+      ids.add(id)
+      started = true
+    }
+    if (started && stop(id, activity)) break
   }
   return ids
 }
