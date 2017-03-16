@@ -10,18 +10,18 @@ Utilities used by the ah-\*.processor modules.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [API](#api)
-  - [idsTriggeredBy](#idstriggeredby)
-  - [oldestId](#oldestid)
-  - [immediatelyBeforeId](#immediatelybeforeid)
-  - [prettyNs](#prettyns)
-  - [safeGetVal](#safegetval)
-  - [safeFirstStamp](#safefirststamp)
-  - [uniqueUserFunctions](#uniqueuserfunctions)
-  - [separateUserFunctions](#separateuserfunctions)
-  - [mergeUserFunctions](#mergeuserfunctions)
-  - [lifeCycle](#lifecycle)
-- [License](#license)
+-   [API](#api)
+    -   [idsTriggeredBy](#idstriggeredby)
+    -   [oldestId](#oldestid)
+    -   [immediatelyBeforeId](#immediatelybeforeid)
+    -   [prettyNs](#prettyns)
+    -   [safeGetVal](#safegetval)
+    -   [safeFirstStamp](#safefirststamp)
+    -   [uniqueUserFunctions](#uniqueuserfunctions)
+    -   [separateUserFunctions](#separateuserfunctions)
+    -   [mergeUserFunctions](#mergeuserfunctions)
+    -   [lifeCycle](#lifecycle)
+-   [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -173,6 +173,32 @@ The return value includes the following properties:
 -   `activity` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the activity whose life cycle to assess
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the life cycle information
+
+### processActivities
+
+Applies multiple processors to the given activities in order to process them
+into operations. Each activity that is identified as part of an operation is removed
+from the activities map, i.e. it is modified in place.
+Therefore any activities still present in the map after processing
+completes, couldn't be processed into an operation.
+
+Each processor needs to be instantiable and have a `process` function that returns
+`{ groups, operations}`.
+Additionally each processor needs to have the following static properties:
+
+-   operationSteps: how many steps (resources) are needed to identify an operation
+-   operation: the description of the operation the processor identifies
+
+**Parameters**
+
+-   `$0` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** options
+    -   `$0.activities` **[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;([Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) \| [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)), [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** activities to be processed
+    -   `$0.processors` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** collection of processors to be applied
+    -   `$0.includeActivities` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** if `true` the activities that were used to identify
+        a step of an operation are attached to the data about that step
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** a collection of operations that were identified from the
+given activities
 
 ## License
 
