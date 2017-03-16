@@ -299,6 +299,63 @@ function lifeCycle(activity) {
   return { created, destroyed, timeAlive }
 }
 
+function byOperationStepsDescending(a, b) {
+  return a.operationSteps > b.operationSteps ? -1 : 1
+}
+
+/**
+ * Applies multiple processors to the given activities in order to process them
+ * into operations. Each activity that is identified as part of an operation is removed
+ * from the activities map, i.e. it is modified in place.
+ * Therefore any activities still present in the map after processing
+ * completes, couldn't be processed into an operation.
+ *
+ * Each processor needs to be instantiable and have a `process` function that returns
+ * `{ groups, operations}`.
+ * Additionally each processor needs to have the following static properties:
+ *
+ * - operationSteps: how many steps (resources) are needed to identify an operation
+ * - operation: the description of the operation the processor identifies
+ *
+ * @name processActivities
+ * @function
+ * @param {Object} $0 options
+ * @param {Map.<Number|String, Object>} $0.activities activities to be processed
+ * @param {Array.<Object>} $0.processors collection of processors to be applied
+ * @param {Boolean} $0.includeActivities if `true` the activities that were used to identify
+ * a step of an operation are attached to the data about that step
+ * @return {Array.<Object>} a collection of operations that were identified from the
+ * given activities
+ */
+function processActivities({
+    activities
+  , processors
+  , includeActivities = false }) {
+  processors.sort(byOperationStepsDescending)
+
+  const allOperations = []
+  for (let i = 0; i < processors.length; i++) {
+    const Processor = processors[i]
+    const processor = new Processor({ activities, includeActivities })
+    const { operations, groups } = processor.process()
+    for (const [ rootId, operation ] of operations) {
+      allOperations.push({
+          name: Processor.operation
+        , steps: Processor.operationSteps
+        , rootId
+        , operation
+      })
+    }
+    // Make sure we don't process an activity twice, i.e. if an fs.stat
+    // call was processed as part of an fs.readFile operation, we don't
+    // want to show it as a separate fs.stat call as well.
+    for (const group of groups.values()) {
+      for (const id of group) activities.delete(id)
+    }
+  }
+  return allOperations
+}
+
 module.exports = {
     idsTriggeredBy
   , oldestId
@@ -310,4 +367,5 @@ module.exports = {
   , separateUserFunctions
   , mergeUserFunctions
   , lifeCycle
+  , processActivities
 }
