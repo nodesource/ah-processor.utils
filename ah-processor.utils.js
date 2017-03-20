@@ -126,6 +126,24 @@ function safeFirstStamp(x) {
   return prettyNs(x[0])
 }
 
+/**
+ * Finds the first stamp in the array of time stamp arrays that
+ * has a valid time stamp.
+ * If none is found it will return a zero time stamp.
+ *
+ * @name firstNonZeroStamp
+ * @function
+ * @param {Array.<Array<Number>>} stamps array of arrays to query for a valid time stamp
+ * @return {Object} prettified time stamp or `prettyNs(0)` if not found
+ */
+function firstNonZeroStamp(stamps) {
+  for (let i = 0; i < stamps.length; i++) {
+    const stamp = safeFirstStamp(stamps[i])
+    if (stamp.ns !== 0) return stamp
+  }
+  return prettyNs(0)
+}
+
 function isUserFunction(fn) {
   // TODO: how does this work on windows?
   return fn.info.file.startsWith('/')
@@ -362,6 +380,7 @@ function processActivities({
 
 module.exports = {
     idsTriggeredBy
+  , firstNonZeroStamp
   , oldestId
   , immediatelyBeforeId
   , prettyNs
