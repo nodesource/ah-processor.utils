@@ -1,6 +1,6 @@
 {
   "name": "ah-processor.utils",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Utilities used by the ah-*.processor modules.",
   "main": "ah-processor.utils.js",
   "scripts": {},
