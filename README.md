@@ -110,6 +110,18 @@ If no timestamp is found, a time of `0` is returned.
 
 Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** the prettified first time stamp
 
+### firstNonZeroStamp
+
+Finds the first stamp in the array of time stamp arrays that
+has a valid time stamp.
+If none is found it will return a zero time stamp.
+
+**Parameters**
+
+-   `stamps` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)>>** array of arrays to query for a valid time stamp
+
+Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** prettified time stamp or `prettyNs(0)` if not found
+
 ### uniqueUserFunctions
 
 Identifies all user functions within the given functions, adds location and
